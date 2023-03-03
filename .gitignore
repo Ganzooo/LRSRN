@@ -1,0 +1,8 @@
+*.pyc
+*.pt
+experiments/*
+*.tflite
+*.onnx
+*.pth
+result_img/*
+wandb/*
