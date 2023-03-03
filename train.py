@@ -38,7 +38,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv_fp32_x3_m6c48_relu.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv_x3_m4c48_relu.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 
 if __name__ == '__main__':
