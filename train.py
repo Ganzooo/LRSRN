@@ -38,8 +38,9 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv_x3_m4c48_relu.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c48_relu.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
+parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -48,20 +49,31 @@ if __name__ == '__main__':
        yaml_args = yaml.load(open(args.config), Loader=yaml.FullLoader)
        opt.update(yaml_args)
     ## set visibel gpu   
-    gpu_ids_str = str(args.gpu_ids).replace('[','').replace(']','')
-    os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
-    os.environ['CUDA_VISIBLE_DEVICES'] = '{}'.format(gpu_ids_str)
-
+    gpu_ids_str = str(args.gpu_ids)
+    # os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '{}'.format(gpu_ids_str)
+    
     ## select active gpu devices
     device = None
     if args.gpu_ids is not None and torch.cuda.is_available():
-        print('use cuda & cudnn for acceleration!')
-        print('the gpu id is: {}'.format(args.gpu_ids))
-        device = torch.device('cuda')
+        print("use cuda & cudnn for acceleration!")
+        print("the gpu id is: {}".format(gpu_ids_str))
+        device = torch.device('cuda:{}'.format(gpu_ids_str))
         torch.backends.cudnn.benchmark = True
     else:
-        print('use cpu for training!')
+        print("use cpu for training!")
         device = torch.device('cpu')
+
+    # ## select active gpu devices
+    # device = None
+    # if args.gpu_ids is not None and torch.cuda.is_available():
+    #     print('use cuda & cudnn for acceleration!')
+    #     print('the gpu id is: {}'.format(args.gpu_ids))
+    #     device = torch.device('cuda')
+    #     torch.backends.cudnn.benchmark = True
+    # else:
+    #     print('use cpu for training!')
+    #     device = torch.device('cpu')
     torch.set_num_threads(args.threads)
 
     if args.wandb:
@@ -79,7 +91,7 @@ if __name__ == '__main__':
 
     ## definitions of model
     model = get_model(args, device)
-    model = nn.DataParallel(model).to(device)
+    #model = nn.DataParallel(model).to(device)
 
     ## definition of loss and optimizer & scheduler
     loss_func = get_criterion(args, device)
