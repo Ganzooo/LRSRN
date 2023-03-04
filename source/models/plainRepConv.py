@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 
 try:
-    from models.RepConv_block import RepBlock
+    from source.models.RepConv_block import RepBlock
 except ModuleNotFoundError:
     from RepConv_block import RepBlock
 
