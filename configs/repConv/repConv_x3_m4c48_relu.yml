@@ -23,7 +23,7 @@ gamma: 0.5
 wd: 0.0
 
 ## parameters for model training
-epochs: 500
+epochs: 800
 
 patch_size: 198
 batch_size: 32

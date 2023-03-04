@@ -110,10 +110,10 @@ if __name__ == '__main__':
     ## resume training
     start_epoch = 1
     if args.resume is not None:
-        ckpt_files = glob.glob(os.path.join(args.resume, 'models', "*.pt"))
+        ckpt_files = os.path.join(args.resume, 'models', "model_x3_last.pt")
         if len(ckpt_files) != 0:
-            ckpt_files = sorted(ckpt_files, key=lambda x: int(x.replace('.pt','').split('_')[-1]))
-            ckpt = torch.load(ckpt_files[-1])
+            #ckpt_files = sorted(ckpt_files, key=lambda x: int(x.replace('.pt','').split('_')[-1]))
+            ckpt = torch.load(ckpt_files)
             prev_epoch = ckpt['epoch']
 
             start_epoch = prev_epoch + 1
