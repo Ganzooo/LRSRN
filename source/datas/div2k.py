@@ -60,26 +60,24 @@ class DIV2K(data.Dataset):
         self.hr_images = []
         self.lr_images = []
 
-        ## generate dataset
-        if self.train:
-            self.start_idx = 1
-            self.end_idx = 801
-        else:
-            self.start_idx = 801
-            self.end_idx = 901
+        self.lr_filenames = sorted(glob.glob(self.LR_folder + '*.jpg'))
 
-        for i in range(self.start_idx, self.end_idx):
-            idx = str(i).zfill(4)
-            hr_filename = os.path.join(self.HR_folder, 'DIV2K_' + idx + self.img_postfix)
-            #lr_filename = os.path.join(self.LR_folder, 'X{}'.format(self.scale), idx + 'x{}'.format(self.scale) + self.img_postfix)
-            lr_filename = os.path.join(self.LR_folder, 'DIV2K_' + idx + '.jpg')
-            self.hr_filenames.append(hr_filename)
-            self.lr_filenames.append(lr_filename)
+        for idx, lr_name in enumerate(self.lr_filenames):
+            _name = os.path.basename(lr_name)[:-4] + '.png'
+            self.hr_filenames.append(os.path.join(self.HR_folder, _name))
+            # if _name[1] == 'pr':
+            #     base_name = _name[4] + '_' + _name[5] + '_' + _name[6] + '_' + _name[7]
+            # else: 
+            #     base_name = _name[3] + '_' + _name[4] + '_' + _name[5] + '_' + _name[6]
+            #self.imageOrgName.append(os.path.join(os.path.join(self.org_path,self.image_org_folder),base_name))
+            
+        assert len(self.hr_filenames) == len(self.lr_filenames)
+          
         self.nums_trainset = len(self.hr_filenames)
 
-        LEN = self.end_idx - self.start_idx
-        hr_dir = os.path.join(self.cache_dir, 'div2k_hr', 'ycbcr' if self.colors==1 else 'rgb')
-        lr_dir = os.path.join(self.cache_dir, 'div2k_lr_x{}'.format(self.scale), 'ycbcr' if self.colors==1 else 'rgb')
+        LEN = self.nums_trainset
+        hr_dir = os.path.join(self.cache_dir, 'hr', 'ycbcr' if self.colors==1 else 'rgb')
+        lr_dir = os.path.join(self.cache_dir, 'lr_x{}'.format(self.scale), 'ycbcr' if self.colors==1 else 'rgb')
         if not os.path.exists(hr_dir):
             os.makedirs(hr_dir)
         else:

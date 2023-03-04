@@ -7,9 +7,9 @@ from torch.utils.data import DataLoader
 def create_datasets(args, mode='train'):
     if mode == 'train':
         div2k = DIV2K(
-            os.path.join(args.data_path, 'train_HR'), 
-            os.path.join(args.data_path, 'train_LR'), 
-            os.path.join(args.data_path, 'div2k_cache'),
+            os.path.join(args.data_path, 'train_HR/'), 
+            os.path.join(args.data_path, 'train_LR/'), 
+            os.path.join(args.data_path, 'cache'),
             train=True, 
             augment=args.data_augment, 
             scale=args.scale, 
@@ -22,9 +22,9 @@ def create_datasets(args, mode='train'):
         valid_dataloaders = []
         if 'DIV2K' in args.eval_sets:
             div2k_val = DIV2K(
-                os.path.join(args.data_path, 'val_HR'), 
-                os.path.join(args.data_path, 'val_LR'), 
-                os.path.join(args.data_path, 'div2k_cache_val'),
+                os.path.join(args.data_path, 'val_HR/'), 
+                os.path.join(args.data_path, 'val_LR/'), 
+                os.path.join(args.data_path, 'cache_val'),
                 train=False, 
                 augment=args.data_augment, 
                 scale=args.scale, 
@@ -36,8 +36,8 @@ def create_datasets(args, mode='train'):
     else: #test mode
 
         test_loader = VALPhaseLoader(
-            os.path.join(args.test_path, 'val_phase_HR'), 
-            os.path.join(args.test_path, 'val_phase_LR'), 
+            os.path.join(args.test_path, 'val_phase_HR/'), 
+            os.path.join(args.test_path, 'val_phase_LR/'), 
             os.path.join(args.test_path, 'val_phase_cache'),
             train=False, 
             augment=args.data_augment, 
