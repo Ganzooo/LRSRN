@@ -6,3 +6,4 @@ experiments/*
 *.pth
 result_img/*
 wandb/*
+final_image_submitt/*
