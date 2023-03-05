@@ -1,5 +1,6 @@
 from .plainsr import PlainSR, PlainSR2
 from .plainRepConv import PlainRepConv, PlainRepConv_st01
+from .plainkh import PlainKH
 
 def get_model(cfg, device):
     if cfg.model == 'plainsr':
@@ -10,6 +11,8 @@ def get_model(cfg, device):
         model = PlainRepConv(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
     elif cfg.model == 'PlainRepConv_st01':
         model = PlainRepConv_st01(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
+    elif cfg.model == 'Plainkh':
+        model = PlainKH(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
     else: 
         raise NameError('Choose proper model name!!!')
     model.to(device)
