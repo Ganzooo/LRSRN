@@ -39,10 +39,30 @@ class LayerNorm2d(nn.Module):
     def forward(self, x):
         return LayerNormFunction.apply(x, self.weight, self.bias, self.eps)
 
+
 class SimpleGate(nn.Module):
     def forward(self, x):
         x1, x2 = x.chunk(2, dim=1)
         return x1 * x2
+
+
+class SCA(nn.Module):
+    
+    def __init__(self, in_channel, out_channel):
+        super(SCA, self).__init__()
+
+        self.in_channel = in_channel
+        self.out_channel = out_channel
+        self.sca = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Conv2d(self.in_channel, self.out_channel, kernel_size=1, padding=0, stride=1,
+                      groups=1, bias=True),
+        )
+    
+    def forwamd(self, x):
+        y = self.sca(x)
+
+        return y
 
 
 class Conv3X3(nn.Module):
