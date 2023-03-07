@@ -7,8 +7,6 @@ import time
 import numpy as np
 from torch.cuda import amp
 import gc
-
-
     
 from utils import save_img
 import numpy as np
@@ -28,8 +26,8 @@ sr_ = Style.RESET_ALL
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c48_relu.yml', help = 'pre-config file for training')
-parser.add_argument('--weight', type=str, default='./experiments/PlainRepConv-x3-time-2023-0303-1713/models/model_x3_best.pt', help = 'resume training or not')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined2.yml', help = 'pre-config file for training')
+parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv-x3-time-b6_tr1_h1_add_adam_5e-4_combined2_psnr29_65/models/model_x3_best.pt', help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
 import warnings
@@ -67,6 +65,7 @@ def inference(cfg, model, dataloader, device):
         elapsed_sec = ((_end_sr-_start_sr) % 3600) % 60
         total_sec = total_sec + elapsed_sec
         
+        _pred = _pred.clamp(0, 255)
         ### Pred data
         for b in range(_pred.shape[0]):
             pred = _pred[b]
@@ -134,7 +133,7 @@ if __name__ == '__main__':
     ## load pretrain
     if args.weight is not None:
         print('load pretrained model: {}!'.format(args.weight))
-        ckpt = torch.load(args.weight)
+        ckpt = torch.load(args.weight, map_location=device)
         model.load_state_dict(ckpt['model_state_dict'])
     else: 
         print('Select weight file')
