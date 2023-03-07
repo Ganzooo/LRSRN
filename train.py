@@ -39,7 +39,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c48_relu.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined1_warmup.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     ## load pretrain
     if args.pretrain is not None:
         print('load pretrained model: {}!'.format(args.pretrain))
-        ckpt = torch.load(args.pretrain)
+        ckpt = torch.load(args.pretrain, map_location=device)
         model.load_state_dict(ckpt['model_state_dict'])
     
     if args.wandb:
@@ -162,12 +162,15 @@ if __name__ == '__main__':
         epoch_loss = 0.0
         stat_dict['epochs'] = epoch
         model = model.train()
-        opt_lr = scheduler.get_last_lr()
+        #opt_lr = scheduler.get_last_lr()
         pbar = tqdm(enumerate(train_dataloader), total=len(train_dataloader), desc='Train {}:'.format(args.model))
         #print('##===========training, Epoch: {}, lr: {} =============##'.format(epoch, opt_lr))
         #for iter, batch in enumerate(train_dataloader):
         mem = torch.cuda.memory_reserved(device=args.gpu_ids) / 1E9 if torch.cuda.is_available() else 0
-        current_lr = scheduler.get_last_lr()[0]
+        try:
+            current_lr = scheduler.get_lr()[0]
+        except:
+            current_lr = scheduler.get_last_lr()[0]
                 
         for step, (data) in pbar:
             optimizer.zero_grad()

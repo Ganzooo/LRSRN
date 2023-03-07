@@ -34,18 +34,30 @@ def create_datasets(args, mode='train'):
             )
             valid_dataloaders += [{'name': 'DIV2K', 'dataloader': DataLoader(dataset=div2k_val, batch_size=1, shuffle=False)}]
     else: #test mode
-
-        test_loader = VALPhaseLoader(
-            os.path.join(args.test_path, 'val_phase_HR/'), 
-            os.path.join(args.test_path, 'val_phase_LR/'), 
-            os.path.join(args.test_path, 'val_phase_cache'),
-            train=False, 
-            augment=args.data_augment, 
-            scale=args.scale, 
-            colors=args.colors, 
-            patch_size=args.patch_size, 
-            repeat=args.data_repeat, 
-        )
+        test_loader = DIV2K(
+                os.path.join(args.test_path, 'val_phase_HR/'), 
+                os.path.join(args.test_path, 'val_phase_LR/'), 
+                os.path.join(args.test_path, 'val_phase_cache'),
+                train=False, 
+                augment=args.data_augment, 
+                scale=args.scale, 
+                colors=args.colors, 
+                patch_size=args.patch_size, 
+                repeat=args.data_repeat, 
+            )
         test_dataloader = DataLoader(dataset=test_loader, batch_size=1, shuffle=False)
+            
+        # test_loader = VALPhaseLoader(
+        #     os.path.join(args.test_path, 'val_phase_HR/'), 
+        #     os.path.join(args.test_path, 'val_phase_LR/'), 
+        #     os.path.join(args.test_path, 'val_phase_cache'),
+        #     train=False, 
+        #     augment=args.data_augment, 
+        #     scale=args.scale, 
+        #     colors=args.colors, 
+        #     patch_size=args.patch_size, 
+        #     repeat=args.data_repeat, 
+        # )
+        # test_dataloader = DataLoader(dataset=test_loader, batch_size=1, shuffle=False)
         return test_dataloader
     return train_dataloader, valid_dataloaders
