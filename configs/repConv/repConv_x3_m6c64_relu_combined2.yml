@@ -1,10 +1,10 @@
-model: 'PlainRepConv_st01'
+model: 'PlainRepConv'
 comment: 'Pre-Test-Step'
 ## parameters for plain
 scale: 3
 colors: 3
-m_plainsr: 4
-c_plainsr: 48
+m_plainsr: 6
+c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
 pretrain:
