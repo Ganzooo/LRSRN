@@ -5,10 +5,9 @@ import numpy as np
 import torchvision
 import segmentation_models_pytorch as smp
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class VGG(nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super(VGG, self).__init__()
         vgg16 = torchvision.models.vgg16(pretrained=True).to(device)
         self.vgg16_conv_4_3 = torch.nn.Sequential(*list(vgg16.children())[0][:22])
@@ -24,32 +23,32 @@ class VGG(nn.Module):
 
         return loss
         
-class VGG_gram(nn.Module):
-    def __init__(self):
-        super(VGG_gram, self).__init__()
-        vgg16 = torchvision.models.vgg16(pretrained=True).to(device)
-        self.vgg16_conv_4_3 = torch.nn.Sequential(*list(vgg16.children())[0][:22])
-        for param in self.vgg16_conv_4_3.parameters():
-            param.requires_grad = False
+# class VGG_gram(nn.Module):
+#     def __init__(self):
+#         super(VGG_gram, self).__init__()
+#         vgg16 = torchvision.models.vgg16(pretrained=True).to(device)
+#         self.vgg16_conv_4_3 = torch.nn.Sequential(*list(vgg16.children())[0][:22])
+#         for param in self.vgg16_conv_4_3.parameters():
+#             param.requires_grad = False
     
-    def gram_matrix(self, x):
-        n, c, h, w = x.size()
-        x = x.view(n*c, h*w)
-        gram = torch.mm(x,x.t()) # 행렬간 곱셈 수행
-        return gram
+#     def gram_matrix(self, x):
+#         n, c, h, w = x.size()
+#         x = x.view(n*c, h*w)
+#         gram = torch.mm(x,x.t()) # 행렬간 곱셈 수행
+#         return gram
 
 
-    def forward(self, output, gt):
-        vgg_output = self.vgg16_conv_4_3(output)
-        vgg_output = self.gram_matrix(vgg_output)
+#     def forward(self, output, gt):
+#         vgg_output = self.vgg16_conv_4_3(output)
+#         vgg_output = self.gram_matrix(vgg_output)
 
-        with torch.no_grad():
-            vgg_gt = self.vgg16_conv_4_3(gt.detach())
-            vgg_gt = self.gram_matrix(vgg_gt)
+#         with torch.no_grad():
+#             vgg_gt = self.vgg16_conv_4_3(gt.detach())
+#             vgg_gt = self.gram_matrix(vgg_gt)
             
-        loss = F.mse_loss(vgg_output, vgg_gt)
+#         loss = F.mse_loss(vgg_output, vgg_gt)
 
-        return loss
+#         return loss
 
 
 def get_criterion(cfg, device):
@@ -57,6 +56,8 @@ def get_criterion(cfg, device):
         return nn.L1Loss().cuda(device)
     elif cfg.loss == 'l2':
         return nn.MSELoss()
+    elif cfg.loss == 'vgg':
+        return VGG(device)
     else: 
         raise NameError('Choose proper model name!!!')
 
