@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
 parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined2.yml', help = 'pre-config file for training')
 parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv-x3-time-b6_tr1_h1_add_adam_5e-4_combined2_psnr29_65/models/model_x3_best.pt', help = 'resume training or not')
-parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
+parser.add_argument('--gpu_ids', type=int, default=0, help = 'gpu_ids')
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -65,7 +65,6 @@ def inference(cfg, model, dataloader, device):
         elapsed_sec = ((_end_sr-_start_sr) % 3600) % 60
         total_sec = total_sec + elapsed_sec
         
-        _pred = _pred.clamp(0, 255)
         ### Pred data
         for b in range(_pred.shape[0]):
             pred = _pred[b]
@@ -76,7 +75,7 @@ def inference(cfg, model, dataloader, device):
             psnr_db.append(psnr)
                     
             fname = str(idx) + '.png'
-            save_img(os.path.join(dirPath, fname), pred.permute(1,2,0).type(torch.uint8).cpu().numpy(), color_domain='rgb')
+            save_img(os.path.join(dirPath, fname), pred.permute(1,2,0).cpu().numpy(), color_domain='rgb')
         pbar.set_postfix(psnr=f'{psnr:0.2f}', elapsed_sec=f'{elapsed_sec:0.2f}')
     _end_sr_all = time.time()
     print(":::::::::::::Test PSNR (Phase VAL)::::::::::", mean(psnr_db))
