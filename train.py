@@ -39,7 +39,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined1_warmup.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined1_warmup_lr5e-4.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
@@ -64,24 +64,13 @@ if __name__ == '__main__':
     else:
         print("use cpu for training!")
         device = torch.device('cpu')
-
-    # ## select active gpu devices
-    # device = None
-    # if args.gpu_ids is not None and torch.cuda.is_available():
-    #     print('use cuda & cudnn for acceleration!')
-    #     print('the gpu id is: {}'.format(args.gpu_ids))
-    #     device = torch.device('cuda')
-    #     torch.backends.cudnn.benchmark = True
-    # else:
-    #     print('use cpu for training!')
-    #     device = torch.device('cpu')
     torch.set_num_threads(args.threads)
 
     if args.wandb:
         run_log_wandb = wandb.init(entity="iilab", project='Realt_Time_Super_Resolution',
                     config={k:v for k, v in dict(opt).items() if '__' not in k},
                     anonymous=anonymous,
-                    name=f"model-{args.model}|ps-{args.patch_size}",
+                    name=f"{args.model}|ps-{args.patch_size}|m-{args.m_plainsr}|c-{args.c_plainsr}|{args.loss}|{args.optimizer}|lr{str(args.lr)}|e{str(args.epochs)}",
                     group=args.comment,
                     )
     else: 
@@ -92,7 +81,6 @@ if __name__ == '__main__':
 
     ## definitions of model
     model = get_model(args, device)
-    #model = nn.DataParallel(model).to(device)
 
     ## definition of loss and optimizer & scheduler
     loss_func = get_criterion(args, device)
@@ -132,7 +120,7 @@ if __name__ == '__main__':
         experiment_name = None
         timestamp = utils.cur_timestamp_str()
         if args.log_name is None:
-            experiment_name = '{}-x{}-time-{}'.format(args.model, args.scale, timestamp)
+            experiment_name = '{}_x{}_p{}_m{}_c{}_{}_{}_lr{}_e{}_t{}'.format(args.model, args.scale, args.patch_size, args.m_plainsr, args.c_plainsr, args.loss, args.optimizer, args.lr, args.epochs, timestamp)
         else:
             experiment_name = '{}-{}'.format(args.log_name, timestamp)
         experiment_path = os.path.join(args.log_path, experiment_name)
@@ -191,22 +179,6 @@ if __name__ == '__main__':
             # Log the metrics
             wandb.log({"train/Loss": epoch_loss/len(train_dataloader),  
                 "train/LR":current_lr})
-        # if args.log_every > 1:
-        #     cur_steps = (iter+1)*args.batch_size
-        #     total_steps = len(train_dataloader.dataset)
-        #     fill_width = math.ceil(math.log10(total_steps))
-        #     cur_steps = str(cur_steps).zfill(fill_width)
-
-        #     epoch_width = math.ceil(math.log10(args.epochs))
-        #     cur_epoch = str(epoch).zfill(epoch_width)
-
-        #     avg_loss = epoch_loss / (iter + 1)
-        #     stat_dict['losses'].append(avg_loss)
-
-        #     timer_end = time.time()
-        #     duration = timer_end - timer_start
-        #     timer_start = timer_end
-        #     print('Epoch:{}, {}/{}, loss: {:.4f}, time: {:.3f}'.format(cur_epoch, cur_steps, total_steps, avg_loss, duration))
 
         if epoch % args.test_every == 0:
             torch.set_grad_enabled(False)
@@ -237,7 +209,7 @@ if __name__ == '__main__':
                     count += 1
                     if count < 20:
                         fname = str(count + 801).zfill(4) + '.jpg'
-                        save_img(os.path.join('./result_img/', str(epoch)+'_rec', fname), sr[0].cpu().numpy().transpose(1,2,0).astype(np.uint8), color_domain='rgb')
+                        save_img(os.path.join(experiment_model_path,'./result_img/', str(epoch)+'_rec', fname), sr[0].cpu().numpy().transpose(1,2,0).astype(np.uint8), color_domain='rgb')
                     pbar.set_postfix(epoch=f'{epoch}', psnr=f'{psnr:0.2f}')
                     
                 avg_psnr = round(avg_psnr/len(loader) + 5e-3, 2)

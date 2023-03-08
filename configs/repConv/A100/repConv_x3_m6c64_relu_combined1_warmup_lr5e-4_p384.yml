@@ -17,15 +17,16 @@ optimizer: adam
 lr: 0.0005
 
 ## scheduler:
-scheduler: 'MultiStepLR'
+scheduler: 'CosineAnnealingWarmRestarts'
 decays: [200, 400, 600]
 gamma: 0.5
 wd: 0.0
+min_lr: 0.000001
 
 ## parameters for model training
 epochs: 800
 
-patch_size: 198
+patch_size: 384
 batch_size: 32
 data_repeat: 20
 data_augment: 1

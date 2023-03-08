@@ -10,14 +10,14 @@ def get_scheduler(cfg, optimizer):
         scheduler = lr_scheduler.CosineAnnealingLR(optimizer,T_max = 2, 
                                                    eta_min=cfg.optimizer.min_lr)
     elif cfg.scheduler == 'CosineAnnealingWarmRestarts':
-        scheduler = lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=cfg.epochs//5, T_mult=2, eta_min=cfg.min_lr)
-    #     scheduler = CosineAnnealingWarmupRestarts(optimizer,
-    #                                               first_cycle_steps=cfg.epochs//4,
-    #                                               cycle_mult=1.0,
-    #                                               max_lr=cfg.lr,
-    #                                               min_lr=cfg.min_lr,
-    #                                               #warmup_steps=cfg.train_config.epochs//8,
-    #                                               gamma=cfg.gamma,)
+#        scheduler = lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=cfg.epochs//5, T_mult=2, eta_min=cfg.min_lr)
+        scheduler = CosineAnnealingWarmupRestarts(optimizer,
+                                                  first_cycle_steps=cfg.epochs//5,
+                                                  cycle_mult=1.0,
+                                                  max_lr=cfg.lr,
+                                                  min_lr=cfg.min_lr,
+                                                  #warmup_steps=cfg.train_config.epochs//8,
+                                                  gamma=cfg.gamma)
     elif cfg.scheduler == 'ReduceLROnPlateau':
         scheduler = lr_scheduler.ReduceLROnPlateau(optimizer,
                                                    mode='min',

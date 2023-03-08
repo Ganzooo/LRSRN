@@ -14,14 +14,14 @@ loss: 'l1'
 
 ## optimizer:
 optimizer: adam
-lr: 0.0005
+lr: 0.0009
 
 ## scheduler:
 scheduler: 'CosineAnnealingWarmRestarts'
 decays: [200, 400, 600]
-gamma: 0.1
+gamma: 0.5
 wd: 0.0
-min_lr: 0.000000001
+min_lr: 0.000001
 
 ## parameters for model training
 epochs: 800
@@ -42,6 +42,6 @@ wandb: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/Combined/'
-test_path: '/dataset/SR/RLSR/val_phase/'
+data_path: './dataset/Combined/'
+test_path: './dataset/val_phase/'
 eval_sets: ['DIV2K']
