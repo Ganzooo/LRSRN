@@ -21,12 +21,13 @@ scheduler: 'MultiStepLR'
 decays: [200, 400, 600]
 gamma: 0.5
 wd: 0.0
+min_lr: 0.000001
 
 ## parameters for model training
 epochs: 800
 
 patch_size: 198
-batch_size: 32
+batch_size: 64
 data_repeat: 20
 data_augment: 1
 
@@ -41,6 +42,6 @@ wandb: True
 threads: 1
 
 ## data specification
-data_path: './dataset/Combined2/'
-test_path: '/dataset/SR/RLSR/val_phase'
+data_path: '/dataset/SR/RLSR/Combined/'
+test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
