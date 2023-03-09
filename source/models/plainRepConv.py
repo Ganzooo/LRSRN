@@ -95,7 +95,7 @@ class PlainRepConv(nn.Module):
                 
 class PlainRepConv_All(nn.Module):
     def __init__(self, module_nums, channel_nums, act_type, scale, colors):
-        super(PlainRepConv, self).__init__()
+        super(PlainRepConv_All, self).__init__()
         self.module_nums = module_nums
         self.channel_nums = channel_nums
         self.scale = scale
