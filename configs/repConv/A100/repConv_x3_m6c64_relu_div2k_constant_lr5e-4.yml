@@ -17,8 +17,8 @@ optimizer: adam
 lr: 0.0005
 
 ## scheduler:
-scheduler: 'CosineAnnealingWarmRestarts'
-decays: [200, 400, 600]
+scheduler: 'MultiStepLR'
+decays: [1000]
 gamma: 0.5
 wd: 0.0
 min_lr: 0.000001

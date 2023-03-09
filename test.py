@@ -26,8 +26,9 @@ sr_ = Style.RESET_ALL
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined2.yml', help = 'pre-config file for training')
-parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv-x3-time-b6_tr1_h1_add_adam_5e-4_combined2_psnr29_65/models/model_x3_best.pt', help = 'resume training or not')
+parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_x3_m6c64_relu_div2k_warmup_lr5e-4.yml', help = 'pre-config file for training')
+parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0308-1656_div2k/models/model_x3_best.pt', help = 'resume training or not')
+parser.add_argument('--outPath', type=str, default='./WEIGHT_RESULT/PlainRepConv_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0308-1656_div2k/', help = 'output image save')
 parser.add_argument('--gpu_ids', type=int, default=0, help = 'gpu_ids')
 
 import warnings
@@ -45,12 +46,12 @@ def inference(cfg, model, dataloader, device):
     pbar = tqdm(enumerate(dataloader), total=len(dataloader), desc='Val-Phase:')
 
     psnr_db = []
-    dirPath = "./final_image_submitt/"
+    dirPath = cfg.outPath + "/final_image_submitt/"
     
     try:
-        os.system("rm -rf ./final_image_submitt/")
+        os.system("rm -rf {}".format(dirPath))
     except:
-        os.mkdir("./final_image_submitt/")
+        os.mkdir("{}".format(dirPath))
 
     for idx, data in pbar:
         lr_patch, hr_patch = data
@@ -78,7 +79,7 @@ def inference(cfg, model, dataloader, device):
             save_img(os.path.join(dirPath, fname), pred.permute(1,2,0).cpu().numpy(), color_domain='rgb')
         pbar.set_postfix(psnr=f'{psnr:0.2f}', elapsed_sec=f'{elapsed_sec:0.2f}')
     _end_sr_all = time.time()
-    print(":::::::::::::Test PSNR (Phase VAL)::::::::::", mean(psnr_db))
+    print(":::::::::::::Test PSNR (Phase VAL)::::::::ket::", mean(psnr_db))
     #print(":::::::::::::Test PSNR (Phase VAL)::::::::::", torch.mean(torch.stack(psnr_db,0)))
     
     print(":::::::::::::Test FPS (only inf - Phase VAL)::::::::::", len(dataloader)/total_sec)
@@ -87,7 +88,7 @@ def inference(cfg, model, dataloader, device):
     print(":::::::::::::Run only inf average sec per image(only inf - Phase VAL)::::::::::", total_sec/len(dataloader))
     print(":::::::::::::Run total average sec per image(total inf+img_save - Phase VAL)::::::::::", (((_end_sr_all-_start_sr_all)% 3600) % 60)/len(dataloader))
     
-    fp = open("./final_image_submitt/readme.txt", 'w')
+    fp = open("{}readme.txt".format(dirPath), 'w')
     #data_runtime = 'runtime per image [s] : {}\n'.format(total_sec/len(dataloader)*4)
     data_runtime = 'runtime per image [s] : {}\n'.format(10.43)
     data_cpu_gpu = 'CPU[1] / GPU[0] : 0\n'
