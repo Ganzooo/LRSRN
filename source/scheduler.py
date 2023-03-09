@@ -25,7 +25,7 @@ def get_scheduler(cfg, optimizer):
                                                    patience=7,
                                                    threshold=0.0001,
                                                    min_lr=cfg.optimizer.min_lr.min_lr,)
-    elif cfg.optimizer.scheduler == 'ExponentialLR':
+    elif cfg.scheduler == 'ExponentialLR':
         scheduler = lr_scheduler.ExponentialLR(optimizer, gamma=0.85)
     elif cfg.scheduler == 'MultiStepLR':
         scheduler = lr_scheduler.MultiStepLR(optimizer, milestones=cfg.decays, gamma=cfg.gamma)
