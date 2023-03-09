@@ -31,6 +31,7 @@ def rgb_to_ycbcr(image: torch.Tensor) -> torch.Tensor:
         torch.Tensor: YCbCr version of the image.
     """
 
+
     if not torch.is_tensor(image):
         raise TypeError("Input type is not a torch.Tensor. Got {}".format(type(image)))
 
