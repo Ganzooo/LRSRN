@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 
 try:
-    from source.models.RepConv_block import RepBlock, RepBlockV2
+    from source.models.RepConv_block import RepBlock, RepBlockV2, RepBlockV3
 except ModuleNotFoundError:
     from RepConv_block import RepBlock, RepBlockV2
 
@@ -185,7 +185,7 @@ class PlainRepConv_BlockV2(nn.Module):
     def fuse_model(self):
         ## reparam as plainsrcd cd
         for idx, blk in enumerate(self.backbone):
-            if type(blk) == RepBlock:
+            if type(blk) == RepBlockV2:
                 RK, RB  = blk.repblock_convert()
                 conv = Conv3X3(blk.inp_planes, blk.out_planes, act_type=blk.act_type)
                 ## update weights & bias for conv3x3
@@ -196,6 +196,32 @@ class PlainRepConv_BlockV2(nn.Module):
                     conv.act.weight = blk.act.weight
                 ## update block for backbone
                 self.backbone[idx] = conv.to(RK.device)
+        #for idx, blk in enumerate(self.head):
+        if type(self.head) == RepBlockV2:
+            RK, RB  = self.head.repblock_convert()
+            conv = Conv3X3(self.head.inp_planes, self.head.out_planes, act_type=self.head.act_type)
+            ## update weights & bias for conv3x3
+            conv.conv3x3.weight.data = RK
+            conv.conv3x3.bias.data   = RB
+            ## update weights & bias for activation
+            if self.head.act_type == 'prelu':
+                conv.act.weight = self.head.act.weight
+            ## update block for backbone
+            self.head = conv.to(RK.device)
+        for idx, blk in enumerate(self.transition):
+            if type(blk) == RepBlockV2:
+                RK, RB  = blk.repblock_convert()
+                conv = Conv3X3(blk.inp_planes, blk.out_planes, act_type=blk.act_type)
+                ## update weights & bias for conv3x3
+                conv.conv3x3.weight.data = RK
+                conv.conv3x3.bias.data   = RB
+                ## update weights & bias for activation
+                if blk.act_type == 'prelu':
+                    conv.act.weight = blk.act.weight
+                ## update block for backbone
+                self.transition[idx] = conv.to(RK.device)
+        
+
                 
 class PlainRepConv_st01(nn.Module):
     def __init__(self, module_nums, channel_nums, act_type, scale, colors):
