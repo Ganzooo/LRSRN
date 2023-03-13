@@ -2,6 +2,7 @@ import torch.optim as optim
 
 from adamp import AdamP
 from adabelief_pytorch import AdaBelief
+from lion_pytorch import Lion
 
 def get_optimizer(cfg, model):
     if cfg.optimizer == 'adam':
@@ -14,6 +15,8 @@ def get_optimizer(cfg, model):
         optimizer = AdaBelief(model.parameters(), lr=cfg.lr, eps=1e-16, betas=(0.9, 0.999), weight_decouple = True, rectify = False)
     elif cfg.optimizer == 'sgd':
         optimizer = optim.SGD(model.parameters(), lr=cfg.lr, momentum=0.9, weight_decay=cfg.wd)
+    elif cfg.optimizer == 'lion':
+        optimizer = Lion(model.parameters(), lr=cfg.lr, weight_decay=cfg.wd)
     else:
         raise NameError('Choose proper optimizer!!!')
     return optimizer
