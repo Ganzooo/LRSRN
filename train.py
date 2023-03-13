@@ -207,7 +207,7 @@ if __name__ == '__main__':
                     avg_ssim += ssim
                     
                     count += 1
-                    if count < 20:
+                    if args.save_val_image and count < 20:
                         fname = str(count + 801).zfill(4) + '.jpg'
                         save_img(os.path.join(experiment_model_path,'./result_img/', str(epoch)+'_rec', fname), sr[0].cpu().numpy().transpose(1,2,0).astype(np.uint8), color_domain='rgb')
                     pbar.set_postfix(epoch=f'{epoch}', psnr=f'{psnr:0.2f}')

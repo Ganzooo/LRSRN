@@ -3,8 +3,8 @@ comment: 'Pre-Test-Step'
 ## parameters for plain
 scale: 3
 colors: 3
-m_plainsr: 4
-c_plainsr: 48
+m_plainsr: 6
+c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
 pretrain:
@@ -18,9 +18,10 @@ lr: 0.0005
 
 ## scheduler:
 scheduler: 'MultiStepLR'
-decays: [500]
+decays: [200, 400, 600]
 gamma: 0.5
 wd: 0.0
+min_lr: 0.000001
 
 ## parameters for model training
 epochs: 800
@@ -42,6 +43,6 @@ wandb: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/Combined2/'
+data_path: './dataset/DIV2K/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
