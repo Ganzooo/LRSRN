@@ -26,9 +26,9 @@ sr_ = Style.RESET_ALL
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_x3_m6c64_relu_div2k_warmup_lr5e-4.yml', help = 'pre-config file for training')
-parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0308-1656_div2k/models/model_x3_best.pt', help = 'resume training or not')
-parser.add_argument('--outPath', type=str, default='./WEIGHT_RESULT/PlainRepConv_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0308-1656_div2k/', help = 'output image save')
+parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_BlockV2_x3_m6c64_relu_div2k_constant_lr5e-4.yml', help = 'pre-config file for training')
+parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv_BlockV2_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0309-1705/models/model_x3_best.pt', help = 'resume training or not')
+parser.add_argument('--outPath', type=str, default='./WEIGHT_RESULT/PlainRepConv_BlockV2_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0309-1705/', help = 'output image save')
 parser.add_argument('--gpu_ids', type=int, default=0, help = 'gpu_ids')
 
 import warnings
@@ -53,6 +53,9 @@ def inference(cfg, model, dataloader, device):
     except:
         os.mkdir("{}".format(dirPath))
 
+    model.fuse_model()
+        
+    print(model)
     for idx, data in pbar:
         lr_patch, hr_patch = data
         lr_patch, hr_patch = lr_patch.to(device), hr_patch.to(device)
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     ## definitions of model
     model = get_model(args, device)
     #model = nn.DataParallel(model).to(device)
-    
+
     ## load pretrain
     if args.weight is not None:
         print('load pretrained model: {}!'.format(args.weight))
