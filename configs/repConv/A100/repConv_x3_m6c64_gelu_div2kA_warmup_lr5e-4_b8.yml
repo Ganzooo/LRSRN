@@ -42,6 +42,6 @@ wandb: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/DIV2K_A/'
+data_path: './dataset/DIV2K_A/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
