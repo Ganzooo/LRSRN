@@ -8,3 +8,4 @@ result_img/*
 wandb/*
 final_image_submitt/*
 WEIGHT_RESULT/*
+checkpoint/*

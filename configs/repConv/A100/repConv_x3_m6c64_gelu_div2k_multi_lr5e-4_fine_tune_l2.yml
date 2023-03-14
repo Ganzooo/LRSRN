@@ -1,4 +1,4 @@
-model: 'PlainRepConv_BlockV2'
+model: 'PlainRepConv'
 comment: 'Pre-Test-Step'
 ## parameters for plain
 scale: 3
@@ -7,24 +7,24 @@ m_plainsr: 6
 c_plainsr: 64
 with_bn: 0
 act_type: 'gelu'
-pretrain:
+pretrain: './checkpoint/PlainRepConv_x3_p192_m6_c64_gelu_l1_adam_lr0.0005_e800/model_x3_best.pt'
 
 ## loss function & optimizer
-loss: 'l1'
+loss: 'l2'
 
 ## optimizer:
-optimizer: lion
-lr: 0.00005
+optimizer: adam
+lr: 0.0005
 
 ## scheduler:
 scheduler: 'MultiStepLR'
-decays: [200, 400, 600]
+decays: [100, 400, 600]
 gamma: 0.5
-wd: 0.01
+wd: 0.0
 min_lr: 0.000001
 
 ## parameters for model training
-epochs: 800
+epochs: 200
 
 patch_size: 192
 batch_size: 32
@@ -43,6 +43,6 @@ wandb: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/DIV2K/'
+data_path: './dataset/DIV2K_A/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
