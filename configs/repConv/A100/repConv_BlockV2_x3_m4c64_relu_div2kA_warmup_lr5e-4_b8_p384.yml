@@ -26,7 +26,7 @@ min_lr: 0.000001
 ## parameters for model training
 epochs: 800
 
-patch_size: 192
+patch_size: 384
 batch_size: 8
 data_repeat: 20
 data_augment: 1
