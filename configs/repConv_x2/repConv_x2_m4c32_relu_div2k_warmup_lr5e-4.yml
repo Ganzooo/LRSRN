@@ -36,6 +36,7 @@ test_every: 1
 log_path: "./experiments"
 log_name:
 
+save_val_image: False
 wandb: True
 
 ## hardware specification

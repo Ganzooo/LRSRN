@@ -4,7 +4,7 @@ comment: 'Test_kihwan_baseline_X2'
 scale: 2
 colors: 3
 m_plainsr: 5
-c_plainsr: 32
+c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
 pretrain:
@@ -36,6 +36,7 @@ test_every: 1
 log_path: "./experiments"
 log_name:
 
+save_val_image: False
 wandb: True
 
 ## hardware specification
