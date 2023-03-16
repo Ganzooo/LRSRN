@@ -1,30 +1,30 @@
 model: 'PlainRepConv'
-comment: 'Pre-Test-Step'
+comment: 'Val_BEST'
 ## parameters for plain
 scale: 3
 colors: 3
 m_plainsr: 4
-c_plainsr: 64
+c_plainsr: 32
 with_bn: 0
 act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_x3_p192_m4_c64_l1_adam_lr0.0005_e800_psnr_28_72/models/model_x3_best.pt'
+pretrain:
 
 ## loss function & optimizer
-loss: 'l2'
+loss: 'l1'
 
 ## optimizer:
 optimizer: adam
-lr: 0.0001
+lr: 0.0005
 
 ## scheduler:
 scheduler: 'CosineAnnealingWarmRestarts'
-decays: [50, 75, 600]
+decays: [200, 400, 600]
 gamma: 0.5
 wd: 0.0
 min_lr: 0.000001
 
 ## parameters for model training
-epochs: 200
+epochs: 800
 
 patch_size: 384
 batch_size: 8
@@ -46,6 +46,6 @@ mixed_pred: True
 threads: 1
 
 ## data specification
-data_path: './dataset/DIV2K_A/'
+data_path: '/dataset/SR/RLSR/DIV2K_B/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']

@@ -1,13 +1,13 @@
 model: 'PlainRepConv'
 comment: 'Pre-Test-Step'
 ## parameters for plain
-scale: 3
+scale: 2
 colors: 3
-m_plainsr: 4
+m_plainsr: 6
 c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_x3_p192_m4_c64_l1_adam_lr0.0005_e800_psnr_28_72/models/model_x3_best.pt'
+pretrain: './checkpoint/PlainRepConv_x2_p192_m6_c64_l1_adam_lr0.0005_e800_t2023-0313-1200/models/model_x2_best.pt'
 
 ## loss function & optimizer
 loss: 'l2'
@@ -26,7 +26,7 @@ min_lr: 0.000001
 ## parameters for model training
 epochs: 200
 
-patch_size: 384
+patch_size: 192
 batch_size: 8
 data_repeat: 20
 data_augment: 1
@@ -39,13 +39,10 @@ save_val_image: False
 
 wandb: True
 
-## Fp16 training
-mixed_pred: True
-
 ## hardware specification
 threads: 1
 
 ## data specification
-data_path: './dataset/DIV2K_A/'
-test_path: '/dataset/SR/RLSR/val_phase/'
+data_path: '/dataset/SR/RLSR/DIV2K_X2/'
+test_path: '/dataset/SR/RLSR/val_phaseX2/'
 eval_sets: ['DIV2K']

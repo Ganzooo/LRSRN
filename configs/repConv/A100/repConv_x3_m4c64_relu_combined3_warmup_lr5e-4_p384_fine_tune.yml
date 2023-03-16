@@ -7,7 +7,7 @@ m_plainsr: 4
 c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_x3_p192_m4_c64_l1_adam_lr0.0005_e800/models/model_x3_best.pt'
+pretrain: './checkpoint/PlainRepConv_x3_p192_m4_c64_l1_adam_lr0.0005_e800_psnr_28_72/models/model_x3_best.pt'
 
 ## loss function & optimizer
 loss: 'l2'
@@ -17,7 +17,7 @@ optimizer: adam
 lr: 0.0001
 
 ## scheduler:
-scheduler: 'MultiStepLR'
+scheduler: 'CosineAnnealingWarmRestarts'
 decays: [50, 75, 600]
 gamma: 0.5
 wd: 0.0
@@ -26,7 +26,7 @@ min_lr: 0.000001
 ## parameters for model training
 epochs: 200
 
-patch_size: 192
+patch_size: 384
 batch_size: 8
 data_repeat: 20
 data_augment: 1
@@ -39,10 +39,13 @@ save_val_image: False
 
 wandb: True
 
+## Fp16 training
+mixed_pred: True
+
 ## hardware specification
 threads: 1
 
 ## data specification
-data_path: './dataset/DIV2K_A/'
+data_path: './dataset/Combined3/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']

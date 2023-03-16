@@ -46,6 +46,6 @@ mixed_pred: True
 threads: 1
 
 ## data specification
-data_path: './dataset/DIV2K_A/'
+data_path: './dataset/Combined/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']

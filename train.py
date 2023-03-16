@@ -22,6 +22,8 @@ from source.losses import get_criterion
 from source.optimizer import get_optimizer
 from source.scheduler import get_scheduler
 from source.datas.utils import create_datasets
+import copy
+from torch.cuda import amp
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -39,7 +41,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m6c64_relu_combined1_warmup_lr5e-4.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
@@ -144,6 +146,9 @@ if __name__ == '__main__':
     print(model)
     sys.stdout.flush()
 
+    scaler = amp.GradScaler()
+    max_norm = 0.1
+    
     ## start training
     timer_start = time.time()
     for epoch in range(start_epoch, args.epochs+1):
@@ -161,13 +166,37 @@ if __name__ == '__main__':
             current_lr = scheduler.get_last_lr()[0]
                 
         for step, (data) in pbar:
-            optimizer.zero_grad()
-            lr, hr = data
-            lr, hr = lr.to(device), hr.to(device)
-            sr = model(lr)
-            loss = loss_func(sr, hr)
-            loss.backward()
-            optimizer.step()
+            if args.mixed_pred:
+                lr, hr = data
+                lr, hr = lr.to(device), hr.to(device)
+                ###Use Unscaled Gradiendts instead of 
+                ### https://pytorch.org/docs/stable/notes/amp_examples.html#amp-examples
+                with amp.autocast(enabled=True, dtype=torch.float16):
+                    sr = model(lr)
+                    #_pred = torch.clamp(_pred, 0, 1)
+                    loss = loss_func(sr, hr)   
+                scaler.scale(loss).backward()
+                
+                # Unscales the gradients of optimizer's assigned params in-place
+                scaler.unscale_(optimizer)
+                # Since the gradients of optimizer's assigned params are unscaled, clips as usual:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
+
+                # optimizer's gradients are already unscaled, so scaler.step does not unscale them,
+                # although it still skips optimizer.step() if the gradients contain infs or NaNs.
+                scaler.step(optimizer)
+
+                # Updates the scale for next iteration.
+                scaler.update()
+                optimizer.zero_grad() # set_to_none=True here can modestly improve performance
+            else: 
+                optimizer.zero_grad()
+                lr, hr = data
+                lr, hr = lr.to(device), hr.to(device)
+                sr = model(lr)
+                loss = loss_func(sr, hr)
+                loss.backward()
+                optimizer.step()
             epoch_loss += float(loss)
 
             pbar.set_postfix(epoch=f'{epoch}',
@@ -229,6 +258,16 @@ if __name__ == '__main__':
                         'scheduler_state_dict': scheduler.state_dict(),
                         'stat_dict': stat_dict
                     }, saved_model_path)
+                    
+                    saved_model_path = os.path.join(experiment_model_path, 'model_x{}_best_submission.pt'.format(args.scale))
+                    # torch.save(model.state_dict(), saved_model_path)
+                    torch.save(model.state_dict(), saved_model_path)
+                    
+                    saved_model_path = os.path.join(experiment_model_path, 'model_x{}_best_submission_deploy.pt'.format(args.scale))
+                    # torch.save(model.state_dict(), saved_model_path)
+                    model_deploy = copy.deepcopy(model)
+                    model_deploy.fuse_model()
+                    torch.save(model_deploy.state_dict(), saved_model_path)
                     
                     if args.wandb:
                         wandb.summary["Best PSNR"]      = avg_psnr
