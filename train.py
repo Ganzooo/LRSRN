@@ -171,7 +171,7 @@ if __name__ == '__main__':
                 lr, hr = lr.to(device), hr.to(device)
                 ###Use Unscaled Gradiendts instead of 
                 ### https://pytorch.org/docs/stable/notes/amp_examples.html#amp-examples
-                with amp.autocast(enabled=True, dtype=torch.float16):
+                with amp.autocast(enabled=True):
                     sr = model(lr)
                     #_pred = torch.clamp(_pred, 0, 1)
                     loss = loss_func(sr, hr)   
