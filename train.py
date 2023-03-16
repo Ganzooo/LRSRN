@@ -120,7 +120,7 @@ if __name__ == '__main__':
         experiment_name = None
         timestamp = utils.cur_timestamp_str()
         if args.log_name is None:
-            experiment_name = '{}_x{}_p{}_m{}_c{}_{}_{}_lr{}_e{}_t{}'.format(args.model, args.scale, args.patch_size, args.m_plainsr, args.c_plainsr, args.loss, args.optimizer, args.lr, args.epochs, timestamp)
+            experiment_name = '{}_x{}_p{}_m{}_c{}_{}_{}_{}_lr{}_e{}_t{}'.format(args.model, args.scale, args.patch_size, args.m_plainsr, args.c_plainsr, args.act_type, args.loss, args.optimizer, args.lr, args.epochs, timestamp)
         else:
             experiment_name = '{}-{}'.format(args.log_name, timestamp)
         experiment_path = os.path.join(args.log_path, experiment_name)
