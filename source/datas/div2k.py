@@ -35,7 +35,7 @@ class DIV2K(data.Dataset):
     def __init__(
         self, HR_folder, LR_folder, CACHE_folder, 
         train=True, augment=True, scale=2, colors=1, 
-        patch_size=96, repeat=168
+        patch_size=96, repeat=168, normalize=True
     ):
         super(DIV2K, self).__init__()
         self.HR_folder = HR_folder
@@ -49,6 +49,7 @@ class DIV2K(data.Dataset):
         self.nums_trainset = 0
         self.train = train
         self.cache_dir = CACHE_folder
+        self.normalize = normalize
 
         ## for raw png images
         self.hr_filenames = []
@@ -136,9 +137,15 @@ class DIV2K(data.Dataset):
         hr, lr = np.load(self.hr_npy_names[idx]), np.load(self.lr_npy_names[idx])
         if self.train:
             train_lr_patch, train_hr_patch = crop_patch(lr, hr, self.patch_size, self.scale, True)
-            return train_lr_patch, train_hr_patch
-        
-        return ndarray2tensor(lr), ndarray2tensor(hr)
+            if self.normalize:
+                return train_lr_patch / 255., train_hr_patch / 255.
+            else: 
+                return train_lr_patch, train_hr_patch
+                
+        if self.normalize:
+            return ndarray2tensor(lr / 255.), ndarray2tensor(hr / 255.)
+        else: 
+            return ndarray2tensor(lr), ndarray2tensor(hr)
 
 if __name__ == '__main__':
     HR_folder = '/dataset/SR/RLSR/DIV2K/train_HR'

@@ -35,7 +35,7 @@ class VALPhaseLoader(data.Dataset):
     def __init__(
         self, HR_folder, LR_folder, CACHE_folder, 
         train=True, augment=True, scale=2, colors=1, 
-        patch_size=96, repeat=168
+        patch_size=96, repeat=168, normalize=True
     ):
         super(VALPhaseLoader, self).__init__()
         self.HR_folder = HR_folder
@@ -49,7 +49,7 @@ class VALPhaseLoader(data.Dataset):
         self.nums_trainset = 0
         self.train = train
         self.cache_dir = CACHE_folder
-
+        self.normalize = normalize
         ## for raw png images
         self.hr_filenames = []
         self.lr_filenames = []
@@ -135,7 +135,10 @@ class VALPhaseLoader(data.Dataset):
             train_lr_patch, train_hr_patch = crop_patch(lr, hr, self.patch_size, self.scale, True)
             return train_lr_patch, train_hr_patch
         
-        return ndarray2tensor(lr), ndarray2tensor(hr)
+        if self.normalize:
+            return ndarray2tensor(lr / 255.), ndarray2tensor(hr)
+        else: 
+            return ndarray2tensor(lr), ndarray2tensor(hr)
 
 if __name__ == '__main__':
     HR_folder = '/dataset/SR/RLSR/DIV2K/train_HR'

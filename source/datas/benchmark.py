@@ -14,11 +14,12 @@ from utils import ndarray2tensor
 
 
 class Benchmark(data.Dataset):
-    def __init__(self, HR_folder, LR_folder, scale=2, colors=1):
+    def __init__(self, HR_folder, LR_folder, scale=2, colors=1, normalize=True):
         super(Benchmark, self).__init__()
         self.HR_folder = HR_folder
         self.LR_folder = LR_folder
-
+        self.normalize = normalize
+        
         self.img_postfix = '.png'
         self.scale = scale
         self.colors = colors

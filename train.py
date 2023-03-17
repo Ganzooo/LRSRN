@@ -41,7 +41,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c64_relu_div2kA_warmup_lr5e-4_b8.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
                     loss = loss_func(sr, hr)   
                 scaler.scale(loss).backward()
                 
-                # Unscales the gradients of optimizer's assigned params in-place
+                # Unscales the gradients of optimizer's assigned params i100n-place
                 scaler.unscale_(optimizer)
                 # Since the gradients of optimizer's assigned params are unscaled, clips as usual:
                 torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)
@@ -226,8 +226,14 @@ if __name__ == '__main__':
                     lr, hr = lr.to(device), hr.to(device)
                     sr = model(lr)
                     # quantize output to [0, 255]
-                    hr = hr.clamp(0, 255)
-                    sr = sr.clamp(0, 255)
+                    # hr = hr.clamp(0, 255)
+                    # sr = sr.clamp(0, 255)
+                    if args.normalize:
+                        hr = hr.clamp(0, 1) * 255
+                        sr = sr.clamp(0, 1) * 255
+                    else: 
+                        hr = hr.clamp(0, 255)
+                        sr = sr.clamp(0, 255)
 
                     # calculate psnr and ssim
                     psnr = utils.calc_psnr(sr, hr)       

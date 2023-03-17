@@ -16,6 +16,7 @@ def create_datasets(args, mode='train'):
             colors=args.colors, 
             patch_size=args.patch_size, 
             repeat=args.data_repeat, 
+            normalize=args.normalize
         )
         train_dataloader = DataLoader(dataset=div2k, num_workers=args.threads, batch_size=args.batch_size, shuffle=True, pin_memory=True, drop_last=True)
         
@@ -31,6 +32,7 @@ def create_datasets(args, mode='train'):
                 colors=args.colors, 
                 patch_size=args.patch_size, 
                 repeat=args.data_repeat, 
+                normalize=args.normalize
             )
             valid_dataloaders += [{'name': 'DIV2K', 'dataloader': DataLoader(dataset=div2k_val, batch_size=1, shuffle=False)}]
     else: #test mode
@@ -57,6 +59,7 @@ def create_datasets(args, mode='train'):
             colors=args.colors, 
             patch_size=args.patch_size, 
             repeat=args.data_repeat, 
+            normalize=args.normalize
         )
         test_dataloader = DataLoader(dataset=test_loader, batch_size=1, shuffle=False)
         return test_dataloader

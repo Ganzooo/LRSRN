@@ -4,7 +4,7 @@ comment: 'Val_BEST'
 scale: 3
 colors: 3
 m_plainsr: 4
-c_plainsr: 32
+c_plainsr: 64
 with_bn: 0
 act_type: 'relu'
 pretrain:
@@ -26,7 +26,7 @@ min_lr: 0.000001
 ## parameters for model training
 epochs: 800
 
-patch_size: 384
+patch_size: 192
 batch_size: 8
 data_repeat: 20
 data_augment: 1
@@ -35,17 +35,16 @@ log_every: 100
 test_every: 1
 log_path: "./experiments"
 log_name:
-save_val_image: False
+save_val_image: True
 
 wandb: True
-
-## Fp16 training
 mixed_pred: True
 
 ## hardware specification
 threads: 1
+normalize: False
 
 ## data specification
-data_path: './dataset/DIV2K_A/'
+data_path: '/dataset/SR/RLSR/DIV2K_A/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
