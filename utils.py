@@ -17,9 +17,12 @@ def save_img(filepath, img, color_domain='rgb'):
     if not os.path.exists(directory):
         os.makedirs(directory)
     if color_domain == 'ycbcr':
-        cv2.imwrite(filepath,cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+        cv2.imwrite(filepath, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
     else:
-        cv2.imwrite(filepath,cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+        if img.ndim == 3:
+            img = img[:, :, [2, 1, 0]]
+        cv2.imwrite(filepath, img)
+        #cv2.imwrite(filepath,cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         
 def rgb_to_ycbcr(image: torch.Tensor) -> torch.Tensor:
     r"""Convert an RGB image to YCbCr.

@@ -18,6 +18,7 @@ from source.datas.utils import create_datasets
 
 from statistics import mean, median
 from skimage.metrics import peak_signal_noise_ratio as psnr_calc
+from source.utils import util_image as util
 
 # For colored terminal text
 from colorama import Fore, Back, Style
@@ -26,10 +27,11 @@ sr_ = Style.RESET_ALL
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_BlockV2_x3_m6c64_relu_div2k_constant_lr5e-4.yml', help = 'pre-config file for training')
-parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/PlainRepConv_BlockV2_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0309-1705/models/model_x3_best.pt', help = 'resume training or not')
-parser.add_argument('--outPath', type=str, default='./WEIGHT_RESULT/PlainRepConv_BlockV2_x3_p198_m6_c64_l1_adam_lr0.0005_e800_t2023-0309-1705/', help = 'output image save')
+parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_x3_m4c64_relu_div2kA_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
+parser.add_argument('--weight', type=str, default='./WEIGHT_RESULT/20230318/PlainRepConv_x3_p384_m4_c64_relu_l1_adam_lr0.0005_e800_t2023-0317-1731_psnr_28_73/models/model_x3_best.pt', help = 'resume training or not')
+parser.add_argument('--outPath', type=str, default='./WEIGHT_RESULT/20230318/PlainRepConv_x3_p384_m4_c64_relu_l1_adam_lr0.0005_e800_t2023-0317-1731_psnr_28_73/', help = 'output image save')
 parser.add_argument('--gpu_ids', type=int, default=0, help = 'gpu_ids')
+parser.add_argument('--fp16', type=bool, default=True, help = 'Fp16')
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -42,7 +44,6 @@ def inference(cfg, model, dataloader, device):
     
     _start_sr_all = time.time()
 
-        
     pbar = tqdm(enumerate(dataloader), total=len(dataloader), desc='Val-Phase:')
 
     psnr_db = []
@@ -62,7 +63,11 @@ def inference(cfg, model, dataloader, device):
         
         _start_sr = time.time()
         
-        _pred = model(lr_patch)
+        if args.fp16:
+            with torch.autocast(device_type="cuda", dtype=torch.float16):
+                _pred = model(lr_patch)
+        else:
+            _pred = model(lr_patch)
         
         _end_sr = time.time()
         
@@ -74,12 +79,18 @@ def inference(cfg, model, dataloader, device):
             pred = _pred[b]
             gt = hr_patch[b]
             
-            psnr = psnr_calc(pred.cpu().numpy().astype(np.uint8),gt.cpu().numpy().astype(np.uint8))
+            if args.normalize:
+                #pred = pred.clamp(0, 1) * 255
+                #gt   = gt.clamp(0, 1) * 255
+                pred = util.tensor2uint(_pred[b])
+            
+            #psnr = psnr_calc(_pred.cpu().numpy().astype(np.uint8), gt.cpu().numpy().astype(np.uint8))
+            psnr = 0
             #psnr = psnr_calc_device(pred, gt)
             psnr_db.append(psnr)
-                    
+            
             fname = str(idx) + '.png'
-            save_img(os.path.join(dirPath, fname), pred.permute(1,2,0).cpu().numpy(), color_domain='rgb')
+            save_img(os.path.join(dirPath, fname), pred, color_domain='rgb')
         pbar.set_postfix(psnr=f'{psnr:0.2f}', elapsed_sec=f'{elapsed_sec:0.2f}')
     _end_sr_all = time.time()
     print(":::::::::::::Test PSNR (Phase VAL)::::::::ket::", mean(psnr_db))
