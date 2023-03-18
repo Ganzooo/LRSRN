@@ -1,5 +1,5 @@
 model: 'PlainRepConv_BlockV2'
-comment: 'Val_BEST'
+comment: 'Val_X2_BEST'
 ## parameters for plain
 scale: 2
 colors: 3
