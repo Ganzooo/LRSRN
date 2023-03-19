@@ -7,7 +7,7 @@ m_plainsr: 4
 c_plainsr: 32
 with_bn: 0
 act_type: 'relu'
-pretrain:
+pretrain: './checkpoint/PlainRepConv_x3_p384_m4_c32_relu_l1_adam_lr0.0005_e800_t2023-0317-1731_psnr_28_53/models/model_x3_best.pt'
 
 ## loss function & optimizer
 loss: 'l2'
