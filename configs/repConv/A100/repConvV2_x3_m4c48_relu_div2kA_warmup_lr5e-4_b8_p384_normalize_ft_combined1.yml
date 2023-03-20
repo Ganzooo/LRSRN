@@ -4,10 +4,10 @@ comment: 'Val_BEST'
 scale: 3
 colors: 3
 m_plainsr: 4
-c_plainsr: 64
+c_plainsr: 48
 with_bn: 0
 act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_BlockV2_x3_p384_m4_c64_relu_l1_adam_lr0.0005_e800_t2023-0317-1733_psnr_28_73/models/model_x3_best.pt'
+pretrain: './checkpoint/PlainRepConv_BlockV2_x3_p384_m4_c48_relu_l1_adam_lr0.0005_e800_t2023-0318-2203_psnr_28_67/models/model_x3_best.pt'
 
 ## loss function & optimizer
 loss: 'l2'
