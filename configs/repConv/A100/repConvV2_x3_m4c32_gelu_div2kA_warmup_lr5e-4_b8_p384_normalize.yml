@@ -4,17 +4,17 @@ comment: 'Val_BEST'
 scale: 3
 colors: 3
 m_plainsr: 4
-c_plainsr: 48
+c_plainsr: 32
 with_bn: 0
-act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_BlockV2_x3_p384_m4_c48_relu_l1_adam_lr0.0005_e800_t2023-0318-2203_psnr_28_67/models/model_x3_best.pt'
+act_type: 'gelu'
+pretrain:
 
 ## loss function & optimizer
-loss: 'l2'
+loss: 'l1'
 
 ## optimizer:
 optimizer: adam
-lr: 0.0001
+lr: 0.0005
 
 ## scheduler:
 scheduler: 'CosineAnnealingWarmRestarts'
@@ -24,7 +24,7 @@ wd: 0.0
 min_lr: 0.000001
 
 ## parameters for model training
-epochs: 200
+epochs: 800
 
 patch_size: 384
 batch_size: 8
@@ -47,6 +47,6 @@ normalize: True
 threads: 1
 
 ## data specification
-data_path: './dataset/Combined3/'
+data_path: './dataset/DIV2K_A/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
