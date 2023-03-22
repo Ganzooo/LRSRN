@@ -7,14 +7,14 @@ m_plainsr: 4
 c_plainsr: 32
 with_bn: 0
 act_type: 'relu'
-pretrain: './checkpoint/PlainRepConv_x2_p384_m4_c32_relu_l1_adam_lr0.0005_e800_t2023-0318-1548/models/model_x2_best.pt'
+pretrain:
 
 ## loss function & optimizer
-loss: 'l2'
+loss: 'l1'
 
 ## optimizer:
 optimizer: adam
-lr: 0.0001
+lr: 0.0005
 
 ## scheduler:
 scheduler: 'CosineAnnealingWarmRestarts'
@@ -24,7 +24,7 @@ wd: 0.0
 min_lr: 0.000001
 
 ## parameters for model training
-epochs: 200
+epochs: 800
 
 patch_size: 384
 batch_size: 8
@@ -33,7 +33,7 @@ data_augment: 1
 
 log_every: 100
 test_every: 1
-log_path: "./experiments/Val_X2_Best/FT_combinedV2"
+log_path: "./experiments/Val_X2_Best"
 log_name:
 save_val_image: False
 
@@ -47,6 +47,6 @@ normalize: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/Combined_X2_V2/'
+data_path: '/dataset/SR/RLSR/DIV2K_X2/'
 test_path: '/dataset/SR/RLSR/val_phase/'
 eval_sets: ['DIV2K']
