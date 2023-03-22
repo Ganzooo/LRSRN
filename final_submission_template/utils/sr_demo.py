@@ -9,7 +9,7 @@ from tqdm import tqdm
 from collections import OrderedDict
 from torch.utils.data import DataLoader
 
-# import models
+import models
 import source.utils.dataset as dd
 
 from source.utils import util_logger
@@ -102,9 +102,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # specify submission
     parser.add_argument("--submission-id", type=str, default='0001')
-    parser.add_argument("--checkpoint", type=str, default='./repConvV2_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384_normalize_x3_best_submission_deploy.pt')
-    parser.add_argument("--save-dir", type=str, default="./results/")
-    parser.add_argument('--config', type=str, default='./utils/configs/x3_final/repConvV2_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
+    parser.add_argument("--checkpoint", type=str, default='../repConvV2_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384_normalize_x3_best_submission_deploy.pt')
+    parser.add_argument("--save-dir", type=str, default="../results/")
+    parser.add_argument('--config', type=str, default='./configs/x3_final/repConvV2_x3_m4c32_gelu_div2kA_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
     
     # specify dirs
     parser.add_argument("--lr-dir", type=str, default='/dataset/SR/RLSR/val_phase/val_phase_LR/')
