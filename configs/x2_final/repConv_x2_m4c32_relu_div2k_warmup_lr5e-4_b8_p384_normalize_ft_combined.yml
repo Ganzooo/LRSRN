@@ -48,5 +48,5 @@ threads: 1
 
 ## data specification
 data_path: '/dataset/SR/RLSR/Combined_X2/'
-test_path: '/dataset/SR/RLSR/val_phase/'
+test_path: '/dataset/SR/RLSR/val_phase_X2/'
 eval_sets: ['DIV2K']
