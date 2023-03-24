@@ -27,7 +27,7 @@ def get_model(cfg, device, mode='Train'):
     elif cfg.model == 'Plainkh':
         model = PlainKH(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
     elif cfg.model.name == 'IMDN':
-        model = IMDN(in_nc=3, out_nc=3, nc=64, nb=8, upscale=3, act_mode='L', upsample_mode='pixelshuffle', negative_slope=0.05)
+        model = IMDN(in_nc=3, out_nc=3, nc=64, nb=8, upscale=cfg.c_plainsr, act_mode='L', upsample_mode='pixelshuffle', negative_slope=0.05)
     else: 
         raise NameError('Choose proper model name!!!')
     model.to(device)
