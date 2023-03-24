@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 
 
-class RealTimeSRNet(nn.Module):
+class RTSRN(nn.Module):
     """
     Implementation based on methods from the AIM 2022 Challenge on 
     Efficient and Accurate Quantized Image Super-Resolution on Mobile NPUs
@@ -39,5 +39,5 @@ class RealTimeSRNet(nn.Module):
         return out
     
 def rtsrn(scale):
-    model = RealTimeSRNet(num_channels=3, num_feats=64, num_blocks=5, upscale=scale)
+    model = RTSRN(num_channels=3, num_feats=64, num_blocks=5, upscale=scale)
     return model
