@@ -1,7 +1,7 @@
-model: 'FSRCNN'
+model: 'RTSRN'
 comment: 'CVPRW2023'
 ## parameters for plain
-scale: 2
+scale: 3
 
 ## loss function & optimizer
 loss: 'l1'
@@ -26,7 +26,7 @@ data_augment: 1
 
 log_every: 100
 test_every: 1
-log_path: "./experiments/FSRCNN"
+log_path: "./experiments/RTSRN"
 log_name:
 save_val_image: False
 
@@ -40,6 +40,6 @@ normalize: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/sota/DIV2K_X2/'
-test_path: '/dataset/SR/RLSR/sota/val_phase_X2/'
+data_path: '/dataset/SR/RLSR/sota/DIV2K/'
+test_path: '/dataset/SR/RLSR/sota/val_phase/'
 eval_sets: ['DIV2K']
