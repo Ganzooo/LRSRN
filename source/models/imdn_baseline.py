@@ -1,5 +1,5 @@
 import torch.nn as nn
-import source.model.basicblock as B
+import basicblock as B
 
 
 """
