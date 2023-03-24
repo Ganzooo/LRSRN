@@ -3,6 +3,7 @@ comment: 'CVPRW2023'
 ## parameters for plain
 scale: 3
 colors: 3
+pretrain:
 
 ## loss function & optimizer
 loss: 'l1'
@@ -12,7 +13,7 @@ optimizer: adam
 lr: 0.0002
 
 ## scheduler:
-scheduler: 'MultistepLR'
+scheduler: 'MultiStepLR'
 decays: [200, 400, 600]
 gamma: 0.5
 wd: 0.0
