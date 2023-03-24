@@ -2,6 +2,7 @@ model: 'FSRCNN'
 comment: 'CVPRW2023'
 ## parameters for plain
 scale: 3
+colors: 3
 
 ## loss function & optimizer
 loss: 'l1'
@@ -40,6 +41,6 @@ normalize: True
 threads: 1
 
 ## data specification
-data_path: '/dataset/SR/RLSR/sota/DIV2K/'
-test_path: '/dataset/SR/RLSR/sota/val_phase/'
+data_path: '/CVPRW2023/dataset/SR/RLSR/sota/DIV2K/'
+test_path: '/CVPRW2023/dataset/SR/RLSR/sota/val_phase/'
 eval_sets: ['DIV2K']
