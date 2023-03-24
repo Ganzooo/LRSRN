@@ -1,4 +1,4 @@
-model: 'IMDN'
+model: 'FSRCNN'
 comment: 'CVPRW2023'
 ## parameters for plain
 scale: 2
