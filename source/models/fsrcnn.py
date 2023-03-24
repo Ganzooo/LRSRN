@@ -23,22 +23,8 @@ class FSRCNN(nn.Module):
         upscale_factor (int): Image magnification factor.
     """
 
-    def __init__(self, act_type, colors, upscale_factor: int) -> None:
+    def __init__(self, colors, upscale_factor: int) -> None:
         super(FSRCNN, self).__init__()
-        self.act_type = act_type
-        
-        # if self.act_type == 'prelu':
-        #     self.act = nn.PReLU(num_parameters=self.out_planes)
-        # elif self.act_type == 'relu':
-        #     self.act = nn.ReLU(inplace=True)
-        # elif self.act_type == 'rrelu':
-        #     self.act = nn.RReLU(lower=-0.05, upper=0.05)
-        # elif self.act_type == 'softplus':
-        #     self.act = nn.Softplus()
-        # elif self.act_type == 'linear':
-        #     pass
-        # else:
-        #     raise ValueError('The type of activation if not support!')
         
         # Feature extraction layer.
         self.feature_extraction = nn.Sequential(

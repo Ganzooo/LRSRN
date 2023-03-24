@@ -2,6 +2,7 @@ from .plainsr import PlainSR, PlainSR2
 from .plainRepConv import PlainRepConv, PlainRepConv_st01, PlainRepConv_BlockV2, PlainRepConv_All, PlainRepConvClip, PlainRepConv_deploy, PlainRepConv_BlockV2_deploy
 from .plainkh import PlainKH
 from .imdn_baseline import IMDN
+from .fsrcnn import FSRCNN
 
 def get_model(cfg, device, mode='Train'):
     if cfg.model == 'plainsr':
@@ -26,8 +27,11 @@ def get_model(cfg, device, mode='Train'):
             model = PlainRepConv_BlockV2_deploy(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
     elif cfg.model == 'Plainkh':
         model = PlainKH(module_nums=cfg.m_plainsr, channel_nums=cfg.c_plainsr, act_type=cfg.act_type, scale=cfg.scale, colors=cfg.colors)
-    elif cfg.model.name == 'IMDN':
+    elif cfg.model == 'IMDN':
         model = IMDN(in_nc=3, out_nc=3, nc=64, nb=8, upscale=cfg.c_plainsr, act_mode='L', upsample_mode='pixelshuffle', negative_slope=0.05)
+    elif cfg.model == "FSRCNN":
+        model = FSRCNN(colors=3, upscale_factor=cfg.scale)
+    
     else: 
         raise NameError('Choose proper model name!!!')
     model.to(device)
