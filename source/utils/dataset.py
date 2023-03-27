@@ -2,6 +2,7 @@ import os
 import numpy as np
 from PIL import Image
 from typing import List, Callable, Tuple
+from sklearn import naive_bayes
 
 
 import torch
@@ -77,3 +78,34 @@ class SRDataset(data.Dataset):
             img_L = self.transform(img_L)
 
         return img_L, self.lr_images[index]
+
+class Eval_Dataset(data.Dataset):
+    def __init__(self, lr_images_dir, hr_images_dir, transform=None, n_channels=3):
+        self.lr_images_dir = lr_images_dir
+        self.lr_images = sorted(os.listdir(lr_images_dir))
+        
+        self.hr_images_dir = hr_images_dir
+        self.hr_images = sorted(os.listdir(hr_images_dir))
+
+        self.transform = transform
+        self.n_channels = n_channels
+
+    def __len__(self):
+        if len(self.lr_images) == len(self.hr_images):
+            return len(self.lr_images)
+
+    def __getitem__(self, index):
+        lr_img_path = os.path.join(self.lr_images_dir, self.lr_images[index])
+        hr_img_path = os.path.join(self.hr_images_dir, self.hr_images[index])
+
+        img_L = util.imread_uint(lr_img_path, n_channels=self.n_channels)
+        img_L = util.uint2tensor3(img_L)
+
+        img_H = util.imread_uint(hr_img_path, n_channels=self.n_channels)
+        img_H = util.uint2tensor3(img_H)
+
+        if self.transform:
+            img_L = self.transform(img_L)
+            img_H = self.transform(img_H)
+
+        return img_L, self.lr_images[index], img_H, self.hr_images[index]
