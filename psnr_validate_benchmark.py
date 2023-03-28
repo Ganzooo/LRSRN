@@ -14,6 +14,7 @@ from tqdm import tqdm
 from yaml import parse
 import yaml
 from skimage.metrics import peak_signal_noise_ratio as psnr_calc
+from skimage.metrics import structural_similarity as ssim_calc
 from ssim import ssim_matlab
 
 from source.models.get_model import get_model
@@ -28,7 +29,8 @@ def evaluate_benchmark_fp32(args, model, hrPath,lrPath, datasetsName):
         os.makedirs(outpath)
 
     total_txt = open(os.path.join(outpath, 'total.txt'), 'w')
-
+    print(args.scale)
+    
     for i, (datasetName) in enumerate(datasetsName):
 
         clip_psnr_list = []
@@ -45,10 +47,16 @@ def evaluate_benchmark_fp32(args, model, hrPath,lrPath, datasetsName):
             img_L = img_L.to(device)
             img_H = img_H.to(device)
             sr = model(img_L)
+            
+            sr_ = sr[0]
+            hr_ = img_H[0]
 
-            psnr = -10 * math.log10(((sr - img_H) * (sr - img_H)).mean())
-            ssim = ssim_matlab(sr, img_H).detach().cpu().numpy()
+            sr_ = (np.round((sr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
+            hr_ = (np.round((hr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
 
+            psnr = 20 * math.log10(((sr_ - hr_) * (sr_ - hr_)).mean())
+            # ssim = ssim_matlab(sr, img_H).detach().cpu().numpy()
+            ssim = ssim_calc(sr_, hr_, channel_axis = -1, multichannel=True)
             clip_psnr_txt.write("psnr : {} \n".format(psnr))
             clip_psnr_list.append(psnr)
 
