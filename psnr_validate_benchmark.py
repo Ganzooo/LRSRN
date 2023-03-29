@@ -30,7 +30,7 @@ def evaluate_benchmark_fp32(args, model, hrPath,lrPath, datasetsName):
 
     total_txt = open(os.path.join(outpath, 'total.txt'), 'w')
     print(args.scale)
-    
+    # model.fuse_model()
     for i, (datasetName) in enumerate(datasetsName):
 
         clip_psnr_list = []
@@ -51,9 +51,15 @@ def evaluate_benchmark_fp32(args, model, hrPath,lrPath, datasetsName):
             sr_ = sr[0]
             hr_ = img_H[0]
 
-            sr_ = (np.round((sr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
-            hr_ = (np.round((hr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
+            # sr_ = (np.round((sr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
+            # hr_ = (np.round((hr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
 
+
+            sr_ = (np.round((sr_.clamp(0,1) * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
+            hr_ = (np.round((hr_.clamp(0,1) * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
+
+
+            # psnr = -10 * math.log10(((sr_ - hr_) * (sr_ - hr_)).mean())
             # psnr = 20 * math.log10(((sr_ - hr_) * (sr_ - hr_)).mean())
             # ssim = ssim_matlab(sr, img_H).detach().cpu().numpy()
             psnr = psnr_calc(sr_, hr_)
