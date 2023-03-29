@@ -54,8 +54,9 @@ def evaluate_benchmark_fp32(args, model, hrPath,lrPath, datasetsName):
             sr_ = (np.round((sr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
             hr_ = (np.round((hr_ * 255).detach().cpu().numpy())).astype('uint8').transpose(1, 2, 0)
 
-            psnr = 20 * math.log10(((sr_ - hr_) * (sr_ - hr_)).mean())
+            # psnr = 20 * math.log10(((sr_ - hr_) * (sr_ - hr_)).mean())
             # ssim = ssim_matlab(sr, img_H).detach().cpu().numpy()
+            psnr = psnr_calc(sr_, hr_)
             ssim = ssim_calc(sr_, hr_, channel_axis = -1, multichannel=True)
             clip_psnr_txt.write("psnr : {} \n".format(psnr))
             clip_psnr_list.append(psnr)
