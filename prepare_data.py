@@ -4,6 +4,7 @@ import argparse
 from PIL import Image
 from tqdm import tqdm
 from torchvision.transforms.functional import center_crop
+import numpy as np 
 
 def main(args):
     
@@ -18,26 +19,13 @@ def main(args):
         img = Image.open(os.path.join(args.image_dir, filename)).convert('RGB')
         img_name, ext = os.path.splitext(filename)
         
-        #img_name = 'Midjorney_' + str(count).zfill(5)
-        #ext = '.png'
-        #count = count + 1
-        
         nW, nH = img.size      
-        if nW >= 2040 and nH >= 1080:        
-            # pre-crop image to DIV2K dimensions
-            img = center_crop(img, output_size=[1080, 2040])
-        elif nW >= 1920 and nH >= 1080:        
-            # pre-crop image to GTA dimensions
-            img = center_crop(img, output_size=[1080, 1920])
-        elif nW >= 1020 and nH >= 1020:        
-            # pre-crop image to LSDIR and ARTBENCH dimensions
-            img = center_crop(img, output_size=[1020, 1020])
-        elif nW >= 1080 and nH >= 510:        
-            # pre-crop image to LSDIR and ARTBENCH dimensions
-            img = center_crop(img, output_size=[510, 1080])
-        elif nW >= 510 and nH >= 510:        
-            # pre-crop image to LSDIR and ARTBENCH dimensions
-            img = center_crop(img, output_size=[510, 510])
+        if nW % args.downsample_factor != 0:
+            nW = np.floor(nW / args.downsample_factor) * args.downsample_factor
+        
+        if nH % args.downsample_factor != 0:
+            nH = np.floor(nH / args.downsample_factor) * args.downsample_factor
+        img = center_crop(img, output_size=[nH, nW])   
         
         try:
             # check sizes
@@ -48,10 +36,8 @@ def main(args):
             if args.gt_out_dir is not None:
                 img.save(os.path.join(args.gt_out_dir, f"{img_name+ext}"))
 
-
-            
             # bicubic downsampling
-            img = img.resize((int(w/args.downsample_factor), int(h/args.downsample_factor)), resample=Image.Resampling.BICUBIC)
+            img = img.resize((int(w/args.downsample_factor), int(h/args.downsample_factor)), resample=Image.BICUBIC)
             
             if ext == ".jpg":
                 img.save(os.path.join(args.lr_out_dir, f"{img_name}.jpg"), "JPEG", quality=100)
@@ -64,11 +50,12 @@ def main(args):
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--image-dir", type=str, default='/dataset/SR/RLSR/Combined_x2/train_HR/')
-    parser.add_argument("--gt-out-dir", type=str, default='/dataset/SR/RLSR/Combined_x2/train_HR_cropped/')
-    parser.add_argument("--lr-out-dir", type=str, default='/dataset/SR/RLSR/Combined_x2/train_LR/')
+    parser.add_argument("--image-dir", type=str, default='/dataset/SR/RLSR/benchmark/benchmark/Urban100/HR')
+    parser.add_argument("--gt-out-dir", type=str, default='/dataset/SR/RLSR/benchmark/benchmark/Urban100/HR_crop/')
+    parser.add_argument("--lr-out-dir", type=str, default='/dataset/SR/RLSR/benchmark/benchmark/Urban100/LR/')
     parser.add_argument("--jpeg-level", type=int, default=90)
     parser.add_argument("--downsample-factor", type=int, default=2)
+    #parser.add_argument("--crop-size", type=int, default=[1080, 2040], nargs="+")
     parser.add_argument("--crop-size", type=int, default=[1080, 2040], nargs="+")
     args = parser.parse_args()
     

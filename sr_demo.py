@@ -38,7 +38,7 @@ def main(args):
     torch.backends.cudnn.benchmark = True
     #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     device = torch.device('cuda:{}'.format(0))
-   
+    
     """
     LOAD MODEL
     """
@@ -49,6 +49,7 @@ def main(args):
             opt.update(yaml_args)
         model = get_model(args, device, mode='Deploy')
         #model = models.__dict__[args.model_name]()
+        
         if args.checkpoint is not None:
             model_path = os.path.join(args.checkpoint)
             model.load_state_dict(torch.load(model_path), strict=True)
@@ -67,7 +68,6 @@ def main(args):
     """
     dataset = dd.SRDataset(lr_images_dir=args.lr_dir, n_channels=3, transform=None)
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
-    
     
     """
     TESTING
@@ -96,19 +96,18 @@ def main(args):
                 # save model output
                 util.imsave(img_E, os.path.join(os.path.join(args.save_dir, args.submission_id, "results", img_name + ".png")))
                 
-        
-        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # specify submission
     parser.add_argument("--submission-id", type=str, default='0001')
     #parser.add_argument("--model-name", type=str, choices=["swin2sr", "imdn", "rfdn"], default='RepConv')
-    parser.add_argument("--checkpoint", type=str, default='./WEIGHT_RESULT/20230318/PlainRepConv_x3_p384_m4_c32_relu_l1_adam_lr0.0005_e800_t2023-0317-1731_psnr_28_53/models/model_x3_best_submission_deploy.pt')
-    parser.add_argument("--save-dir", type=str, default="./WEIGHT_RESULT/20230318/PlainRepConv_x3_p384_m4_c32_relu_l1_adam_lr0.0005_e800_t2023-0317-1731_psnr_28_53/")
-    parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConv_x3_m4c32_relu_div2kA_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
+    parser.add_argument("--checkpoint", type=str, default='./WEIGHT_RESULT/Candidate/m4c64/PlainRepConv_BlockV2_x3_p384_m4_c64_relu_l2_adam_lr0.0001_e200_t2023-0321-1800_combined3_psnr_28_74/models/model_x3_best_submission_deploy.pt')
+    parser.add_argument("--save-dir", type=str, default="./WEIGHT_RESULT/Candidate/m4c64/PlainRepConv_BlockV2_x3_p384_m4_c64_relu_l2_adam_lr0.0001_e200_t2023-0321-1800_combined3_psnr_28_74/")
+    parser.add_argument('--config', type=str, default='./configs/repConv/A100/repConvV2_x3_m4c64_relu_div2kA_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
     
     # specify dirs
     parser.add_argument("--lr-dir", type=str, default='/dataset/SR/RLSR/val_phase/val_phase_LR/')
+    #parser.add_argument("--lr-dir", type=str, default='/dataset/SR/RLSR/test_phase/test_phase_LR/')
     parser.add_argument("--save-sr", action="store_true", default=True)
     
     # specify test case

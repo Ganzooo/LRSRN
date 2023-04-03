@@ -131,3 +131,4 @@ if __name__ == "__main__":
         
     #profile_model()
     inference_test_model(args, device)
+    
