@@ -31,7 +31,7 @@ You can download Div2k dataset from Web [Link](https://cv.snu.ac.kr/research/EDS
 
 You can download Benchmark dataset from Web [Link] (https://cv.snu.ac.kr/research/EDSR/benchmark.tar)
 
-Combined test dataset from Drive [Link] (https://drive.google.com/file/d/1O9l3AZTFcSU_PcL_BHvI9YdLl3VOdTSX/view?usp=sharing)
+Combined test dataset from Drive [Link] (https://drive.google.com/file/d/1feZltvT0COZ87SjMxJpGMsrWTk1uLibD/view?usp=sharing)
  - Combined dataset includes: 
     - Train: DIV2K train set (full 800), Flickr train set (2650 full), GTA (train seq 00 ~ 19 seq) sample 361, LSDIR (first 1000)
     - Val: DIV2K val set (full 100), Flickr val (100), GTA (90), LSDIR(100)
