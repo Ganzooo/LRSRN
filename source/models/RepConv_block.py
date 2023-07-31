@@ -101,12 +101,11 @@ class RepBlock(nn.Module):
         # biases
         if bias0 is not None and bias1 is not None:
             bias0_ = bias0.reshape([bias0.shape[0], 1]) # 1d -> 2d
-            #bs_tensor = torch.tensor((torch.matmul(torch.tensor(weight1_, requires_grad=False), torch.tensor(bias0_, requires_grad=False))).reshape([bias1.shape[0]]), requires_grad=False) + torch.tensor(bias1, requires_grad=False)  # with bias
             bs_tensor = torch.matmul(weight1_, bias0_).reshape([bias1.shape[0]]) + bias1  # with bias
         elif bias0 is not None:
             bs_tensor = torch.tensor(bias1, requires_grad=False, device=device)  #without Bias
         else:
-            bs_tensor = torch.zeros([self.out_channels], requires_grad=False, device=device)
+            bs_tensor = torch.zeros([self.out_planes], requires_grad=False, device=device)
 
         return wt_tensor, bs_tensor
     
