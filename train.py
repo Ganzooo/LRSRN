@@ -32,8 +32,7 @@ warnings.filterwarnings("ignore")
 import wandb
 
 try:
-    wandb.login(key='0b0a03cb580e75ef44b4dff7f6f16ce9cfa8a290')     ###Ganzoo
-    # wandb.login(key='4a9d99600935d83e7f012dc3707d1c431de7efbf')     ###Kihwan
+    ## Add wandb key
     anonymous = None
 except:
     anonymous = "must"
@@ -41,7 +40,7 @@ except:
 
 parser = argparse.ArgumentParser(description='Simple Super Resolution')
 ## yaml configuration files
-parser.add_argument('--config', type=str, default='./configs/repConv/repConv_x3_m4c64_relu_div2kA_warmup_lr5e-4_b8.yml', help = 'pre-config file for training')
+parser.add_argument('--config', type=str, default='./configs/x2/repConv_x2_m4c32_relu_div2k_warmup_lr5e-4_b8_p384_normalize.yml', help = 'pre-config file for training')
 parser.add_argument('--resume', type=str, default=None, help = 'resume training or not')
 parser.add_argument('--gpu_ids', type=int, default=1, help = 'gpu_ids')
 
@@ -227,9 +226,7 @@ if __name__ == '__main__':
                 for lr, hr in pbar:
                     lr, hr = lr.to(device), hr.to(device)
                     sr = model(lr)
-                    # quantize output to [0, 255]
-                    # hr = hr.clamp(0, 255)
-                    # sr = sr.clamp(0, 255)
+  
                     if args.normalize:
                         hr = hr.clamp(0, 1) * 255
                         sr = sr.clamp(0, 1) * 255
@@ -258,7 +255,7 @@ if __name__ == '__main__':
                     stat_dict[name]['best_psnr']['epoch'] = epoch
                     
                     saved_model_path = os.path.join(experiment_model_path, 'model_x{}_best.pt'.format(args.scale))
-                    # torch.save(model.state_dict(), saved_model_path)
+                    
                     torch.save({
                         'epoch': epoch,
                         'model_state_dict': model.state_dict(),
@@ -268,11 +265,11 @@ if __name__ == '__main__':
                     }, saved_model_path)
                     
                     saved_model_path = os.path.join(experiment_model_path, 'model_x{}_best_submission.pt'.format(args.scale))
-                    # torch.save(model.state_dict(), saved_model_path)
+                    
                     torch.save(model.state_dict(), saved_model_path)
                     
                     saved_model_path = os.path.join(experiment_model_path, 'model_x{}_best_submission_deploy.pt'.format(args.scale))
-                    # torch.save(model.state_dict(), saved_model_path)
+                    
                     model_deploy = copy.deepcopy(model)
                     model_deploy.fuse_model()
                     torch.save(model_deploy.state_dict(), saved_model_path)
