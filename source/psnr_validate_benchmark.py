@@ -16,6 +16,7 @@ import yaml
 from skimage.metrics import peak_signal_noise_ratio as psnr_calc
 from skimage.metrics import structural_similarity as ssim_calc
 from ssim import ssim_matlab
+import time
 
 from source.models.get_model import get_model
 

@@ -107,7 +107,6 @@ if __name__ == "__main__":
     
     # specify dirs
     parser.add_argument("--lr-dir", type=str, default='/dataset/SR/RLSR/val_phase/val_phase_LR/')
-    #parser.add_argument("--lr-dir", type=str, default='/dataset/SR/RLSR/test_phase/test_phase_LR/')
     parser.add_argument("--save-sr", action="store_true", default=True)
     
     # specify test case

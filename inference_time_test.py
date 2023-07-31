@@ -84,7 +84,7 @@ def inference(cfg, model, dataloader, device):
                 #gt   = gt.clamp(0, 1) * 255
                 pred = util.tensor2uint(_pred[b])
             
-            #psnr = psnr_calc(_pred.cpu().numpy().astype(np.uint8), gt.cpu().numpy().astype(np.uint8))
+            psnr = psnr_calc(_pred.cpu().numpy().astype(np.uint8), gt.cpu().numpy().astype(np.uint8))
             psnr = 0
             #psnr = psnr_calc_device(pred, gt)
             psnr_db.append(psnr)

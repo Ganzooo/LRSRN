@@ -42,7 +42,7 @@ Path of Dataset must be set in ./config/*name_of_yaml*.yaml
 You can generate LR images with compression noise.
 ```
 ## LR path & HR path must be set by manually
-python source/dataset/real_time_sr_dataset_prepare.py 
+python source/data/prepare_data.py 
 ```
 
 ### Training
@@ -53,14 +53,14 @@ You can set all Parameters at yaml file ***./config/name_of_model.yaml***
 cd simple_real_time_super_resolution
 
 ## If you set all settings correct
-python train.py --config ./config/repConv_fp32_x3_m6c48_relu.yml
+python train.py --config ./config/x2_final/repConv_x2_m4c32_relu_div2k_warmup_lr5e-4_b8_p384_normalize.yml
 ```
 ### Testing
 You can set all Parameters in ***./config/config_base_test.yaml***
 
 ```
-## If you set all settings correct
-python test.py
+## For test your model use sr_demo to check inference time.
+python sr_demo.py
 ```
 
 ### Check Result
