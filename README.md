@@ -3,7 +3,7 @@
 ### Poster & Presentation Link
 |  |  |
 |       :---       |     :---:     |
-| <a href="https://drive.google.com/file/d/1fqnAzitvML2ma1BIqreVd-mgj5n9S_Ld/view?usp=sharing"><img src="images/LRSRN_poster.png" width="300" border="0"></a> | <a href="https://docs.google.com/presentation/d/1-DfdfX-8hyfIbpmmiJG90cMJ5zPHAHaG/edit#slide=id.p1"><img src="images/LRSRN_ppt.png" width="270" border="0"></a> |
+| <a href="https://drive.google.com/file/d/1fqnAzitvML2ma1BIqreVd-mgj5n9S_Ld/view?usp=sharing"><img src="images/LRSRN_poster.png" width="300" border="0"></a> | <a href="https://docs.google.com/presentation/d/1-DfdfX-8hyfIbpmmiJG90cMJ5zPHAHaG/edit#slide=id.p1"><img src="images/LRSRN_slide.png" width="270" border="0"></a> |
 | | |
 
 An older version implemented based on [SimpleIR](https://github.com/xindongzhang/SimpleIR).
