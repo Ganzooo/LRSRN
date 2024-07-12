@@ -1,4 +1,11 @@
-# Baseline Trainer Code for Real-Time Super Resolution
+# [Lightweight Real-Time Image Super-Resolution Network for 4K Images](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Gankhuyag_Lightweight_Real-Time_Image_Super-Resolution_Network_for_4K_Images_CVPRW_2023_paper.pdf)
+
+### Poster & Presentation Link
+|  |  |
+|       :---       |     :---:     |
+| <a href="https://drive.google.com/file/d/1fqnAzitvML2ma1BIqreVd-mgj5n9S_Ld/view?usp=sharing"><img src="images/LRSRN_poster.png" width="300" border="0"></a> | <a href="https://docs.google.com/presentation/d/1-DfdfX-8hyfIbpmmiJG90cMJ5zPHAHaG/edit#slide=id.p1"><img src="images/LRSRN_ppt.png" width="270" border="0"></a> |
+| | |
+
 An older version implemented based on [SimpleIR](https://github.com/xindongzhang/SimpleIR).
 
 The following is more advanced version implemented by us.
