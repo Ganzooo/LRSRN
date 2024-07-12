@@ -6,12 +6,6 @@
 | <a href="https://drive.google.com/file/d/1fqnAzitvML2ma1BIqreVd-mgj5n9S_Ld/view?usp=sharing"><img src="images/LRSRN_poster.png" width="300" border="0"></a> | <a href="https://docs.google.com/presentation/d/1-DfdfX-8hyfIbpmmiJG90cMJ5zPHAHaG/edit#slide=id.p1"><img src="images/LRSRN_slide.png" width="270" border="0"></a> |
 | | |
 
-An older version implemented based on [SimpleIR](https://github.com/xindongzhang/SimpleIR).
-
-The following is more advanced version implemented by us.
-  - Logger -> Wandb
-  - Argument parsing -> use config files at ./configs/
-
 ### Dependencies & Installation
 
 Please refer to the following simple steps for installation.
@@ -80,3 +74,19 @@ You can check ideal model inference time by pytorch profilling tool. You can set
 ## If you set all settings correct
 python profiller_model.py
 ```
+
+### Citation
+```
+@InProceedings{Gankhuyag_2023_CVPR,
+    author    = {Gankhuyag, Ganzorig and Yoon, Kihwan and Park, Jinman and Son, Haeng Seon and Min, Kyoungwon},
+    title     = {Lightweight Real-Time Image Super-Resolution Network for 4K Images},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
+    month     = {June},
+    year      = {2023},
+    pages     = {1746-1755}
+}
+```
+
+### Our Team's other works
+Our New RTSR Network Achieve 1st Place in CVPR2024 Workshop
+[CASR : Efficient Cascade Network Structure with Channel Aligned method for 4K Real-Time Single Image Super-Resolution](https://github.com/rlghksdbs/CASR/edit/master/README.md)
