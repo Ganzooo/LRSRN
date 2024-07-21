@@ -1,10 +1,18 @@
-# [Lightweight Real-Time Image Super-Resolution Network for 4K Images](https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Gankhuyag_Lightweight_Real-Time_Image_Super-Resolution_Network_for_4K_Images_CVPRW_2023_paper.pdf)
+<div align="center">
+# Lightweight Real-Time Image Super-Resolution Network for 4K Images
 
-### Poster & Presentation Link
-|  |  |
-|       :---       |     :---:     |
-| <a href="https://drive.google.com/file/d/1fqnAzitvML2ma1BIqreVd-mgj5n9S_Ld/view?usp=sharing"><img src="images/LRSRN_poster.png" width="300" border="0"></a> | <a href="https://docs.google.com/presentation/d/1-DfdfX-8hyfIbpmmiJG90cMJ5zPHAHaG/edit#slide=id.p1"><img src="images/LRSRN_slide.png" width="270" border="0"></a> |
-| | |
+### Page & Presentation Link
+<div>
+    <h4 align="center">
+        <a href="https://rlghksdbs.github.io/lrsrn_page/" target='_blank'>
+        <img src="https://img.shields.io/badge/🐳-Project%20Page-blue">
+        </a>
+        <a href="https://openaccess.thecvf.com/content/CVPR2023W/NTIRE/papers/Gankhuyag_Lightweight_Real-Time_Image_Super-Resolution_Network_for_4K_Images_CVPRW_2023_paper.pdf" target='_blank'>
+        <img src="https://img.shields.io/badge/arXiv-Paper-b31b1b.svg">
+        </a>
+    </h4>
+</div>
+</div>
 
 ### Dependencies & Installation
 
