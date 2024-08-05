@@ -99,4 +99,4 @@ python profiller_model.py
 ### Our Team's other works
 Our New RTSR Network Achieve 1st Place in CVPR2024 Workshop 🎉
 
-[CASR : Efficient Cascade Network Structure with Channel Aligned method for 4K Real-Time Single Image Super-Resolution](https://github.com/rlghksdbs/CASR/edit/master/README.md)
+[CASR : Efficient Cascade Network Structure with Channel Aligned method for 4K Real-Time Single Image Super-Resolution](https://github.com/rlghksdbs/CASR)
